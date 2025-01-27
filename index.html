@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>컴퓨터 구조 시뮬레이터</title>
+    <link rel="stylesheet" href="mips.css">
+</head>
+
+<body>
+    <div class="navbar">
+        <div class="title">컴퓨터 구조 시뮬레이터</div>
+        <div class="buttons">
+            <button class="runButton">
+                <img src="https://img.icons8.com/ios/50/fjx0LfGCNuZb/play.png" alt="Play Icon" style="width: 30px; height: 30px; vertical-align: middle;">
+            </button>
+            <button class="resetButton">
+                <img src="https://img.icons8.com/?size=100&id=zPrClTQ0Cwku&format=png&color=000000" alt="Download Icon" style="width: 30px; height: 30px; vertical-align: middle;">
+            </button>
+            <button id="saveButton">
+                <img src="https://img.icons8.com/?size=100&id=18764&format=png&color=000000" alt="Save Icon" style="width: 30px; height: 30px; vertical-align: middle;">
+            </button>
+        </div>
+    </div>
+    <hr>
+    <div class="main">
+        <div class="code-container">
+            <div class="PC_view">PC : 00400024</div>
+            <textarea id="inputField" class="code" spellcheck="false" placeholder="코드를 입력해 주세요."></textarea>
+        </div>
+        <div class="circuit-container">
+            <div class="stages">
+                <div class="Card">
+                    <button class="IF">IF</button>
+                    <div class="IF_Instruction"></div>
+                </div>
+                <div class="Card">
+                    <button class="ID">ID</button>
+                    <div class="ID_Instruction"></div>
+                </div>
+                <div class="Card">
+                    <button class="EX">EX</button>
+                    <div class="EX_Instruction"></div>
+                </div>
+                <div class="Card">
+                    <button class="MEM">MEM</button>
+                    <div class="MEM_Instruction"></div>
+                </div>
+                <div class="Card">
+                    <button class="WB">WB</button>
+                    <div class="WB_Instruction"></div>
+                </div>
+            </div>
+            <div class="circuit"></div>
+        </div>
+    </div>
+    <footer>
+        이 프로젝트는 컴퓨터 구조의 이해를 돕기 위한 시뮬레이터입니다. 다소 맞지 않는 결과가 생길 수 있습니다.
+        <div>
+            <a href="https://github.com/raxNone/MIPS-Project" target="_blank" style="margin-top: 2%; color: white; text-decoration: none;">GITHUB 링크</a>
+        </div>
+    </footer>
+
+    <script>
+        // Base64 인코딩 및 디코딩 함수
+        const base64Encode = (text) => btoa(encodeURIComponent(text));
+        const base64Decode = (encodedText) => decodeURIComponent(atob(encodedText));
+
+        // DOM 요소 가져오기
+        const inputField = document.getElementById("inputField");
+        const saveButton = document.getElementById("saveButton");
+
+        // URL에서 데이터 복원
+        const params = new URLSearchParams(window.location.search);
+        if (params.has("data")) {
+            const encodedData = params.get("data");
+            const decodedData = base64Decode(encodedData);
+            inputField.value = decodedData; // 텍스트 복원
+        }
+
+        // URL에 데이터 저장 버튼 클릭 이벤트
+        saveButton.addEventListener("click", () => {
+            const inputText = inputField.value;
+            if (inputText.trim() === "") {
+                alert("저장할 데이터를 입력하세요.");
+                return;
+            }
+            const encodedData = base64Encode(inputText);
+            const newUrl = `${window.location.origin}${window.location.pathname}?data=${encodedData}`;
+            window.history.pushState({}, "", newUrl); // URL 변경
+            alert("데이터가 URL에 저장되었습니다!");
+        });
+    </script>
+    <script src="mips.js"></script>
+</body>
+</html>
